@@ -1,0 +1,40 @@
+package numgen
+
+type StrRepo interface {
+	FetchStr(uint32) string
+	GetSize() uint32
+}
+
+type Generator struct {
+	num   uint32
+	x_pos uint32
+	y_pos uint32
+	z_pos uint32
+	pos   uint32
+
+	x_size uint32
+	y_size uint32
+	z_size uint32
+	total  uint32
+
+	x StrRepo
+	y StrRepo
+	z StrRepo
+}
+
+func (g *Generator) init() {
+	g.num = 0
+	g.x_size = g.x.GetSize()
+	g.y_size = g.y.GetSize()
+	g.z_size = g.z.GetSize()
+	g.total = g.x_size * g.y_size * g.z_size
+}
+
+func (g *Generator) gen() string {
+	g.pos = PseudoEncrypt_v2(g.num, g.total)
+	g.x_pos = g.total / (g.y_size * g.z_size)
+	g.y_pos = (g.total - g.x_pos*(g.y_size*g.z_size)) / g.z_size
+	g.z_pos = g.total % g.z_size
+
+	return g.x.FetchStr(g.x_pos) + g.y.FetchStr(g.y_pos) + g.z.FetchStr(g.z_pos)
+}
