@@ -1,4 +1,4 @@
-package numgen
+package namegen
 
 type StrRepo interface {
 	FetchStr(uint32) string
