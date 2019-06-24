@@ -31,7 +31,12 @@ func (g *Generator) init() {
 }
 
 func (g *Generator) gen() string {
+
 	g.pos = PseudoEncrypt_v2(g.num, g.total)
+	for g.pos>g.total{
+		g.pos = PseudoEncrypt_v2(g.num, g.total)
+	}
+	
 	g.x_pos = g.total / (g.y_size * g.z_size)
 	g.y_pos = (g.total - g.x_pos*(g.y_size*g.z_size)) / g.z_size
 	g.z_pos = g.total % g.z_size
