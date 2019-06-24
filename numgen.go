@@ -16,14 +16,14 @@ func PseudoEncrypt(seed uint32) uint32 {
 	return uint32((r1 << 16) + l1)
 }
 
-func PseudoEncrypt_v2(seed uint32, dec_len int) uint32 {
+func PseudoEncrypt_v2(seed uint32, dec_len uint32) uint32 {
 	var bit_len uint32
 	bit_len = 32
-	if math.Pow10(dec_len) >= float64(math.MaxUint32) {
+	if math.Pow10(int(dec_len)) >= float64(math.MaxUint32) {
 		bit_len = 32
 	} else {
-		value := int32(math.MaxInt32)
-		for int32(math.Pow10(dec_len)) < value>>2 {
+		value := uint32(math.MaxUint32)
+		for uint32(math.Pow10(int(dec_len))) < value>>2 {
 			value >>= 2
 			bit_len -= 2
 		}
