@@ -2,7 +2,6 @@ package numgen
 
 import (
 	"sync"
-	"sync/atomic"
 )
 
 var once sync.Once
@@ -24,10 +23,10 @@ func GetRandNumGenerator() *RandNumGen {
 //Gen 生成
 func (gen *RandNumGen) Gen() uint32 {
 	ret := pseudoEncrypt(gen.seed)
-	atomic.AddUint32(&gen.seed, 1)
+	gen.seed++
 	if ret == 0 {
 		ret = pseudoEncrypt(gen.seed)
-		atomic.AddUint32(&gen.seed, 1)
+		gen.seed++
 	}
 	return ret
 }
@@ -47,13 +46,13 @@ func GetRandNumLenGenerator(decLen uint32) *RandNumGenLen {
 	return randNumGenLenInstance
 }
 
-//生成
+//Gen 生成
 func (gen *RandNumGenLen) Gen() uint32 {
 	ret := pseudoEncryptV2(gen.seed, gen.len)
-	atomic.AddUint32(&gen.seed, 1)
+	gen.seed++
 	if ret == 0 {
 		ret = pseudoEncryptV2(gen.seed, gen.len)
-		atomic.AddUint32(&gen.seed, 1)
+		gen.seed++
 	}
 	return ret
 }
