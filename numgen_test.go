@@ -1,7 +1,6 @@
 package numgen
 
 import (
-	"fmt"
 	"math"
 	"testing"
 
@@ -13,7 +12,7 @@ func TestNameGenerate(t *testing.T) {
 		exists := make(map[uint32]bool)
 		var i uint32
 		for i = 0; i < 100000; i++ {
-			key := PseudoEncrypt(i)
+			key := pseudoEncrypt(i)
 			//fmt.Println(i, key)
 			_, dup := exists[key]
 			So(dup, ShouldBeFalse)
@@ -29,14 +28,29 @@ func TestNameGenerate_v2(t *testing.T) {
 		for len = 10; len > 0; len-- {
 			exists := make(map[uint32]bool)
 			for i = 0; i < 100000 && i < uint32(math.Pow10(int(len))); i++ {
-				key := PseudoEncrypt_v2(i, len)
+				key := pseudoEncryptV2(i, len)
 				_, dup := exists[key]
 				So(dup, ShouldBeFalse)
 				So(key, ShouldBeLessThan, math.Pow10(int(len+1)))
 				exists[key] = true
-				fmt.Println(i, key)
+				//	fmt.Println(i, key)
 			}
 		}
 
+	})
+}
+
+func TestNameGenerator(t *testing.T) {
+	Convey("generator", t, func() {
+		exists := make(map[uint32]bool)
+		var i uint32
+		generator := GetRandNumGenerator()
+		for i = 0; i < 100000; i++ {
+			key := generator.Gen()
+			//fmt.Println(i, key)
+			_, dup := exists[key]
+			So(dup, ShouldBeFalse)
+			exists[key] = true
+		}
 	})
 }
